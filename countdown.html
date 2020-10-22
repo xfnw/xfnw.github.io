@@ -1,0 +1,156 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+h1, h2 {
+	font-weight: 100
+}
+h1 {
+  text-align: center;
+  font-size: 110px;
+  margin:0;
+  margin-top: 50px;
+  margin-bottom: 0px;
+  font-family: monospace;
+  color: #0f0;
+}
+h2 {
+  text-align: center;
+  font-family: monospace;
+  color: #0f0;
+  font-size: 40px;
+  margin:0;
+  margin-top: 60px;
+}
+body {
+  background-image: url('https://xfnw.ttm.sh/avatar.png');
+  background-color: black;
+  background-size:256px;
+  border-radius:32px;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center; 
+  overflow: hidden;
+  margin:0;
+  padding:0;
+}
+
+
+.blur {
+        -webkit-filter: url(#blur-filter);
+        filter: url(#blur-filter);
+        filter: blur(10px);
+        animation: blur 2s linear infinite;
+    }
+.blur-svg {
+        display: none;
+    }
+@keyframes blur {
+        50% { filter: blur(0px) }
+       }
+
+
+
+.blink {
+        //animation: blinker 2s linear infinite;
+        position: fixed;
+        width: 100%;
+        opacity: 1;
+       }
+      @keyframes blinker {  
+        0% {transform: translateX(100%);}
+        50% { opacity: 1; }
+        100% {transform: translateX(-100%);}
+       }
+
+.blinkb {
+        background: black;
+        animation: blinkers 2s linear infinite;
+        position: fixed;
+        margin: 0px;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        z-index: 1;
+       }
+      @keyframes blinkers {
+        50% { opacity: 0; }
+       }
+
+
+</style>
+
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="blur-svg">
+    <defs>
+        <filter id="blur-filter">
+            <feGaussianBlur stdDeviation="3"></feGaussianBlur>
+        </filter>
+    </defs>
+</svg>
+
+</head>
+<body>
+
+<h1 id="timer" class="blink"></h1>
+<h2 id="message"></h2>
+
+<div class="blinkb"></div>
+
+<script>
+// get the query string
+function getQueryVariable(variable) {
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return(false);
+}
+
+// better replacing
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
+// Set the date were counting down to
+var countDownDate = new Date(decodeURI(getQueryVariable("time"))).getTime();
+
+// set the text
+document.getElementById('message').innerHTML = getQueryVariable("text").replaceAll("%20", " ");
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+  // Get todays date and time
+  var now = new Date().getTime();
+    
+  // Find the distance between now and the count down date
+  var distance = countDownDate - now;
+    
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+  // Output the result in an element with id="demo"
+  document.getElementById("timer").innerHTML = days + "d " + hours + "h "
+  + minutes + "m " + seconds + "s ";
+    
+  // If the count down is over, write some text 
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("timer").innerHTML = "Stream Starting... Please Wait...";
+  }
+}, 1000);
+</script>
+
+</body>
+</html>
+

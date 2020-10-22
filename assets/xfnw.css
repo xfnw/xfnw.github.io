@@ -1,0 +1,57 @@
+/* ~xfnw's css! */
+/* gpl affero v3 */
+body {
+background: #141415;
+font-family: sans-serif;
+color: #cdcdcd;
+}
+
+h1, h2, h3, h4, h5 {
+	font-weight: 100;
+}
+
+div {
+border: 1px solid #cdcdcd;
+border-left: 3px solid #cdcdcd;
+padding: 10px;
+border-radius: 0px 15px 15px 0px;
+margin-top: 5px;
+}
+
+html {
+width: 700px;
+margin: 0 auto;
+}
+
+a {
+text-decoration: none;
+color: #acc;
+}
+
+a:hover {
+text-decoration: underline;
+}
+
+
+code, kbd, pre {
+background: #555;
+color: #eee;
+}
+
+pre {
+padding: 10px;
+border-radius: 0px 10px 10px 0px;
+border: 1px solid #cdcdcd;
+border-left: 3px solid #cdcdcd;
+overflow:auto;
+}
+
+
+@media screen and (max-width:700px) {
+html {
+width: 100%;
+}
+}
+
+
+
