@@ -34,15 +34,13 @@ text-decoration: underline;
 
 
 code, kbd, pre {
-background: #555;
+background: #222;
 color: #eee;
 }
 
 pre {
-padding: 10px;
+padding: 3px;
 border-radius: 0px 10px 10px 0px;
-border: 1px solid #cdcdcd;
-border-left: 3px solid #cdcdcd;
 overflow:auto;
 }
 
