@@ -1,0 +1,116 @@
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="duck2py">
+        <meta name="author" content="xfnw">
+        <meta name="theme-color" content="#00cc00">
+        <title>duck2py</title>
+        <link rel="stylesheet" type="text/css" href="https://tilde.team/css/hacker.css">
+
+
+<script>
+function takeInput() {
+return document.getElementById('inputbox').value.split('\n')
+}
+
+function sendOutput(text) {
+document.getElementById('outputbox').value=text.join('\n')
+}
+
+function convert() {
+sendOutput(duck2py(takeInput()))
+}
+
+function duck2py(input) {
+var output = `# duck2py, created by xfnw
+import usb_hid
+from time import sleep
+from adafruit_hid.keyboard import Keyboard
+from adafruit_hid.keycode import Keycode as k
+from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
+
+sleep(1) # wait for initilization
+kb = Keyboard(usb_hid.devices)
+l = KeyboardLayoutUS(kb)
+sleep(0.5)
+`.split('\n')
+
+input.forEach( (c, p) => {
+
+args = c.split(' ')
+c = [args.shift()]
+orig = c.concat(args)
+c = c.shift()
+switch(c) {
+case 'DELAY':
+output.push('sleep('+args.join(' ')+'/1000)')
+
+break
+case 'REM':
+output.push('#'+args.join(' '))
+break
+
+case 'STRING':
+output.push('sleep(0.05);l.write("'+args.join(' ').replace('"','\\"')+'")')
+break
+
+case 'REPEAT':
+for (var i=0; i<args[0]; i++) {
+output.push(output[output.length -1])
+}
+break
+
+default:
+output.push('')
+orig.forEach( (v, n) => {
+output[output.length -1] += ('sleep(0.05);kb.press(k.'+v.toUpperCase()+');')
+})
+output[output.length -1] += ('sleep(0.05);kb.release_all()')
+}
+
+})
+
+return output
+}
+
+</script>
+
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-header">
+                <div class="pull-right">
+                    <p><a href="https://tilde.team/">&lt;- back to tilde.team</a></p>
+                </div>
+                <h1><strong>duck2py</strong></h1>
+            </div>
+<p>
+a converter that converts a simple implimentation of hak5's duckyscript
+to circuitpyhon-compatable code.
+</p>
+
+<input type="button" value="Quack!" class="btn btn-primary pull-right" onclick="convert()">
+
+<br>
+<hr>
+<div class="row">
+
+<div class='col-md-6'>
+<textarea id="inputbox" class="form-control" rows="15"></textarea>
+</div>
+<div class='col-md-6'>
+<textarea id="outputbox" class="form-control" rows="15"></textarea>
+</div>
+</div>
+<hr>
+<small>the ui was hacked together with ~team bootstrap, dont judge me lol</small>
+
+
+<br><br><br>
+    </body>
+</html>
+
