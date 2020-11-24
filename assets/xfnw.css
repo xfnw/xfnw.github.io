@@ -2,25 +2,14 @@
 /* gpl affero v3 */
 body {
 background: #141415;
-font-family: sans-serif;
+font-family: mono,monospace,sans-serif;
 color: #cdcdcd;
-}
-
-h1, h2, h3, h4, h5 {
-	font-weight: 100;
-}
-
-div {
-border: 1px solid #cdcdcd;
-border-left: 3px solid #cdcdcd;
-padding: 10px;
-border-radius: 0px 15px 15px 0px;
-margin-top: 5px;
-}
-
-html {
-width: 700px;
+max-width: 700px;
 margin: 0 auto;
+}
+
+h1, h2, h3 {
+	font-weight: 100;
 }
 
 a {
@@ -45,11 +34,6 @@ overflow:auto;
 }
 
 
-@media screen and (max-width:700px) {
-html {
-width: 100%;
-}
-}
 
 
 
