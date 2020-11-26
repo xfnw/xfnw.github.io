@@ -10,6 +10,7 @@ margin: 0 auto;
 
 h1, h2, h3 {
 	font-weight: 100;
+	font-family: 'VT323';
 }
 
 a {
@@ -33,7 +34,35 @@ border-radius: 0px 10px 10px 0px;
 overflow:auto;
 }
 
+mark {
+	background-color: #dc5;
+}
+
+@font-face {
+	font-family: 'VT323';
+	src: url(https://xfnw.ttm.sh/assets/PressStart2P-Regular.ttf);
+}
 
 
+summary {
+	cursor: pointer;
+	padding: 10px;
+}
+
+th, summary {
+	background-color: #222;
+}
+
+th, td, details {
+	border: 1px solid #222;
+}
+th, td {
+	padding: 5px;
+}
+
+table, details *:not(summary) {
+	border-collapse: collapse;
+	margin: 10px;
+}
 
 
