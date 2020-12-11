@@ -2,15 +2,15 @@
 /* gpl affero v3 */
 body {
 background: #141415;
-font-family: mono,monospace,sans-serif;
+font-family: sans-serif;
 color: #cdcdcd;
 max-width: 700px;
 margin: 0 auto;
+padding:10px;
 }
 
 h1, h2, h3 {
 	font-weight: 100;
-	font-family: 'VT323',mono,monospace;
 }
 
 a {
@@ -23,14 +23,13 @@ text-decoration: underline;
 }
 
 
-code, kbd, pre {
+code, kbd, pre, .flex div {
 background: #222;
 color: #eee;
 }
 
-pre {
-padding: 3px;
-border-radius: 0px 10px 10px 0px;
+pre, .flex div {
+padding: 5px;
 overflow:auto;
 }
 
@@ -65,4 +64,24 @@ table, details *:not(summary) {
 	margin: 10px;
 }
 
+.flex {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.flex div {
+	display:flex;
+	min-width: 10em;
+	width: 100%;
+	margin: 10px;
+	flex: 1 1 0;
+	flex-direction: column;
+}
+
+.flex div h3 {
+	margin: 0;
+}
+.flex div p {
+	flex: 1 1 0;
+}
 
