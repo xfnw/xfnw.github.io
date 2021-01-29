@@ -1,9 +1,9 @@
 # proofs
-go verify it at https://xfnw.ttm.sh/proof.txt.sig
-	  - **age**: age15nwugsw8hdf20edhvmkpx357jvhq843k7vkp56fz5td8wnd6susqdt093l
-	  - **signify**: RWQkR1Es1uIhT2VZdWpaITfS9bDh+uJiEEIOo1SrZltgRwBWdi3+ejSe
-	  - **gpg**: AFC2DBC06ADB4DF6353C2F396DD55FE390CCCC7C
+go verify it at https://xfnw.ttm.sh/proof.txt.gpg
+	  - **age**: age1nc0magz9xw2rhrpnsg49q0lvm5hmm9s05jrsjak9249jhf469qaq3us55f
+	  - **signify**: RWRtrqdMaJPiIGDgiKaWEJijrV/mGroP5qNDmZW0/Ps2Ct+obGbx7wO0
+	  - **gpg**: 3DC941B2960D930F85C1F10F61E199CD3E82EE46
 
-This document will expire on 2021-01-01 and will need to be re-signed.
+This document will expire on 2021-06-01 and will need to be re-signed.
 If that does not happen i probably forgot but it might be an imposter!
 
