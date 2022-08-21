@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- based on https://causal.agency css -->
+  <style>
+    :root {
+      --dark: #141415;
+      --light: #cdcdcd;
+      --lightsel: #fff;
+      --ansi0: #161510;
+      --ansi1: #A32810;
+      --ansi2: #727A18;
+      --ansi3: #A37720;
+      --ansi4: #3D6266;
+      --ansi5: #7A4955;
+      --ansi6: #557A55;
+      --ansi7: #8E8463;
+      --ansi8: #4C4635;
+      --ansi9: #CC3214;
+      --ansi10: #8E991E;
+      --ansi11: #CC9528;
+      --ansi12: #4C7B7F;
+      --ansi13: #995B6B;
+      --ansi14: #6B996B;
+      --ansi15: #CCBC8E;
+      --ansi16: #14130E;
+      --ansi17: #B7A980;
+      --ansi18: #CCBC8E;
+      --ansi19: #A34110;
+      --ansi20: #72694F;
+    }
+
+    table.head, table.foot { width: 100%; }
+    td.head-rtitle, td.foot-os { text-align: right; }
+    td.head-vol { text-align: center; }
+    div.Pp { margin: 1ex 0ex; }
+    div.Nd, div.Bf, div.Op { display: inline; }
+    span.Pa, span.Ad { font-style: italic; }
+    span.Ms { font-weight: bold; }
+    dl.Bl-diag dt { font-weight: bold; }
+    code.Nm, code.Fl, code.Cm, code.Ic, code.In, code.Fd, code.Fn,
+    code.Cd { font-weight: bold; font-family: inherit; }
+
+    table { border-collapse: collapse; }
+    table.Nm code.Nm { padding-right: 1ch; }
+    table.tbl tr td { padding: 1ch; }
+    table.foot { margin-top: 1em; }
+
+    html {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12pt;
+      background-color: var(--dark);
+      color: var(--light);
+      -moz-tab-size: 4;
+      tab-size: 4;
+    }
+    body {
+      max-width: 80ch;
+      margin: 1em auto;
+      padding: 0 1ch;
+    }
+    ul.index { padding: 0; }
+    ul.index li {
+      display: inline;
+      list-style-type: none;
+    }
+    a { color: var(--light); }
+    a:visited { color: var(--light); }
+    a.permalink, a.tag {
+      color: var(--light);
+      text-decoration: none;
+    }
+    a.permalink code:target,
+    h1.Sh:target a.permalink,
+    h2.Ss:target a.permalink,
+    a.tag:target {
+      color: var(--lightsel);
+      outline: none;
+    }
+
+    .hilex.Keyword { color: var(--ansi9); }
+    .hilex.Macro { color: var(--ansi2); }
+    .hilex.Comment { color: var(--ansi14); }
+    .hilex.String { color: var(--ansi6); }
+    .hilex.StringFormat { color: var(--ansi14); }
+    .hilex.Interpolation { color: var(--ansi1); }
+  </style>
+
+  <title>banter(1)</title>
+</head>
+<body>
+<table class="head">
+  <tr>
+    <td class="head-ltitle">banter(1)</td>
+    <td class="head-vol">General Commands Manual</td>
+    <td class="head-rtitle">banter(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<code class="Nm">banter</code> &#x2014;
+<div class="Nd">little script to make irc color art that will probably get you
+  banned</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">banter</code></td>
+    <td>[<code class="Fl">-d</code> <var class="Ar">delay</var>]
+      [<code class="Fl">-w</code> <var class="Ar">width</var>]
+      [<code class="Fl">-</code><code class="Fl">-colorfmt</code>
+      <var class="Ar">format</var>]
+      [<code class="Fl">-</code><code class="Fl">-filler</code>
+      <var class="Ar">filler</var>] <span class="Pa">file</span></td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<code class="Nm">banter</code> is a image to irc color codes converter.
+<p class="Pp">note that <code class="Nm">banter</code> does not check if the
+    line is too long for irc, additional filtering may be needed if you do not
+    want accidental wrapping.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="OPTIONS"><a class="permalink" href="#OPTIONS">OPTIONS</a></h1>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#d"><code class="Fl" id="d">-d</code></a>
+    <var class="Ar">delay</var></dt>
+  <dd>set the <var class="Ar">delay</var> in seconds between output lines. this
+      does not factor in computation time.</dd>
+  <dt><a class="permalink" href="#w"><code class="Fl" id="w">-w</code></a>
+    <var class="Ar">width</var></dt>
+  <dd>the <var class="Ar">width</var> of filler characters. the actual line will
+      almost certainly be longer because of color codes.</dd>
+  <dt><code class="Fl">-</code><code class="Fl">-colorfmt</code>
+    <var class="Ar">format</var></dt>
+  <dd>the unicode-escaped format of the colorcodes. you probably do not want to
+      change it, the default of <code class="Cm">'\x03{},{}'</code> is usually
+      fine for all irc-related use.</dd>
+  <dt><code class="Fl">-</code><code class="Fl">-filler</code>
+    <var class="Ar">filler</var></dt>
+  <dd>what to fill the actual contents of the text with. you could use it to
+      hide messages if you want. the default value is
+      <code class="Cm">'.'</code>.</dd>
+  <dt><span class="Pa">file</span></dt>
+  <dd>the path to the image to convert</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="BUGS"><a class="permalink" href="#BUGS">BUGS</a></h1>
+please report any bugs found to
+  <a class="Lk" href="https://github.com/xfnw/banter/issues">https://github.com/xfnw/banter/issues</a>.
+<p class="Pp">note that <code class="Nm">banter</code> does not support
+    non-rgb[a] color palettes, and an exception on other palettes like grayscale
+    is to be expected and not a bug.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="AUTHORS"><a class="permalink" href="#AUTHORS">AUTHORS</a></h1>
+<span class="An">xfnw</span>
+  &lt;<a class="Mt" href="mailto:xfnw@riseup.net">xfnw@riseup.net</a>&gt;
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">January 14, 2021</td>
+    <td class="foot-os">Linux 5.4.0-59-generic</td>
+  </tr>
+</table>
+</body>
+</html>

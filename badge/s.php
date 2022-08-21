@@ -26,5 +26,7 @@ if (__FILE__ == $_SERVER['SCRIPT_FILENAME']) {
 	} else {
 		badge('badge','error',1);
 	}
+} else if (array_key_exists(1,$argv) && array_key_exists(2,$argv) && array_key_exists(3,$argv)) {
+	badge($argv[2],$argv[3],$argv[1]);
 }
 ?>

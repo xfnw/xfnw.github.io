@@ -1,87 +1,91 @@
-/* ~xfnw's css! */
-/* gpl affero v3 */
 body {
-background: #141415;
-font-family: sans-serif;
-color: #cdcdcd;
-max-width: 700px;
-margin: 0 auto;
-padding:10px;
+  background: #141415;
+  font-family: sans-serif;
+  color: #cdcdcd;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 10px;
 }
 
-h1, h2, h3 {
-	font-weight: 100;
+h1,
+h2,
+h3 {
+  font-weight: 400;
 }
 
 a {
-text-decoration: none;
-color: #3291FF;
+  text-decoration: none;
+  color: #3291ff;
 }
 
 a:hover {
-text-decoration: underline;
+  text-decoration: underline;
 }
 
-
-code, kbd, pre, .flex div {
-background: #222;
-color: #eee;
+code,
+kbd,
+pre,
+.flex div {
+  background: #222;
+  color: #eee;
 }
 
-pre, .flex div {
-padding: 5px;
-overflow:auto;
+pre,
+.flex div {
+  padding: 5px;
+  overflow: auto;
 }
 
 mark {
-	background-color: #dc5;
+  background-color: #dc5;
 }
-
-@font-face {
-	font-family: 'VT323';
-	src: url(https://xfnw.ttm.sh/assets/PressStart2P-Regular.ttf);
-}
-
 
 summary {
-	cursor: pointer;
-	padding: 10px;
+  cursor: pointer;
+  padding: 10px;
 }
 
-th, summary {
-	background-color: #222;
+th,
+summary {
+  background-color: #222;
 }
 
-th, td, details {
-	border: 1px solid #222;
+th,
+td,
+details {
+  border: 1px solid #222;
 }
-th, td {
-	padding: 5px;
+th,
+td {
+  padding: 5px;
 }
 
-table, details *:not(summary) {
-	border-collapse: collapse;
-	margin: 10px;
+table,
+details *:not(summary) {
+  border-collapse: collapse;
+  margin: 10px;
 }
 
 .flex {
-	display: flex;
-	flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
 }
 
 .flex div {
-	display:flex;
-	min-width: 10em;
-	width: 100%;
-	margin: 10px;
-	flex: 1 1 0;
-	flex-direction: column;
+  display: flex;
+  min-width: 10em;
+  width: 100%;
+  margin: 10px;
+  flex: 1 1 0;
+  flex-direction: column;
 }
 
 .flex div h3 {
-	margin: 0;
+  margin: 0;
 }
+
 .flex div p {
-	flex: 1 1 0;
+  flex: 1 1 0;
 }
 

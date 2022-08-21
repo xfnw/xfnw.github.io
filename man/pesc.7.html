@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+
+  <!-- based on https://causal.agency css -->
+  <style>
+    :root {
+      --dark: #141415;
+      --light: #cdcdcd;
+      --ansi0: #161510;
+      --ansi1: #A32810;
+      --ansi2: #727A18;
+      --ansi3: #A37720;
+      --ansi4: #3D6266;
+      --ansi5: #7A4955;
+      --ansi6: #557A55;
+      --ansi7: #8E8463;
+      --ansi8: #4C4635;
+      --ansi9: #CC3214;
+      --ansi10: #8E991E;
+      --ansi11: #CC9528;
+      --ansi12: #4C7B7F;
+      --ansi13: #995B6B;
+      --ansi14: #6B996B;
+      --ansi15: #CCBC8E;
+      --ansi16: #14130E;
+      --ansi17: #B7A980;
+      --ansi18: #CCBC8E;
+      --ansi19: #A34110;
+      --ansi20: #72694F;
+    }
+
+    table.head, table.foot { width: 100%; }
+    td.head-rtitle, td.foot-os { text-align: right; }
+    td.head-vol { text-align: center; }
+    div.Pp { margin: 1ex 0ex; }
+    div.Nd, div.Bf, div.Op { display: inline; }
+    span.Pa, span.Ad { font-style: italic; }
+    span.Ms { font-weight: bold; }
+    dl.Bl-diag dt { font-weight: bold; }
+    code.Nm, code.Fl, code.Cm, code.Ic, code.In, code.Fd, code.Fn,
+    code.Cd { font-weight: bold; font-family: inherit; }
+
+    table { border-collapse: collapse; }
+    table.Nm code.Nm { padding-right: 1ch; }
+    table tr td { padding: 1ch; }
+    table.foot { margin-top: 1em; }
+
+    html {
+      line-height: 1.25em;
+      font-family: "JetBrains Mono", monospace;
+      background-color: var(--dark);
+      color: var(--light);
+      -moz-tab-size: 4;
+      tab-size: 4;
+    }
+    body {
+      max-width: 80ch;
+      margin: 1em auto;
+      padding: 0 1ch;
+    }
+    ul.index { padding: 0; }
+    ul.index li {
+      display: inline;
+      list-style-type: none;
+    }
+    a { color: var(--light); }
+    a:visited { color: var(--light); }
+    a.permalink, a.tag {
+      color: var(--light);
+      text-decoration: none;
+    }
+    a.permalink code:target,
+    h1.Sh:target a.permalink,
+    h2.Ss:target a.permalink,
+    a.tag:target {
+      color: var(--light);
+      outline: none;
+    }
+
+    .hilex.Keyword { color: var(--ansi9); }
+    .hilex.Macro { color: var(--ansi2); }
+    .hilex.Comment { color: var(--ansi14); }
+    .hilex.String { color: var(--ansi6); }
+    .hilex.StringFormat { color: var(--ansi14); }
+    .hilex.Interpolation { color: var(--ansi1); }
+  </style>
+
+  <title>pesc(7)</title>
+</head>
+<body>
+<table class="head">
+  <tr>
+    <td class="head-ltitle">pesc(7)</td>
+    <td class="head-vol">Miscellaneous Information Manual</td>
+    <td class="head-rtitle">pesc(7)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+pesc - a lame esoteric language thinly disguised as a calculator
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+Pesc is a calculation language for evaluating reverse-Polish notation
+  mathematical expressions. Pesc has many similarities to dc's language.
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNTAX"><a class="permalink" href="#SYNTAX">SYNTAX</a></h1>
+Pesc is comprised of a series of <b>tokens</b>, the basic building block of the
+  language. Each token will either push itself onto the <b>stack</b>, or (in the
+  case of functions and operators) manipulate the contents of the stack and
+  (maybe) push a result.
+<p class="Pp"></p>
+<div class="Bd-indent">&#x2022;A <b>number</b> are what you'd expect: a single
+  64-bit floating point number. Numbers can have underscores: 1_000_000 is
+  equivalent to 1000000, and 3.14_15_92 is equal to 3.141592.</div>
+<div class="Bd-indent">&#x2022;<b>Operators</b> are single-character functions
+  that pop values off of the stack, do something with it, and push a result.
+  Typical operators include the arithmetic operators (+, -, /, *) and the
+  bitwise operators (&amp;, |, ~, X, &lt;, &gt;). Example: '1 1 +' evaluates 1 +
+  1.</div>
+<div class="Bd-indent">&#x2022;<b>Functions</b> are similar to operators, but
+  can be multiple characters in length, and are called by surrounding the
+  function name in brackets. All operators have corresponding function names
+  (e.g. '+' =&gt; 'add'). Example: '1 1 [add]' does exactly what '1 1 +' would
+  do.</div>
+<div class="Bd-indent">&#x2022;A <b>macro</b>, or a code block, is a chunk of
+  Pesc code delimited by braces that will be pushed onto the stack to be
+  executed later (using the ';' operator). Example: '{1 1 +};' pushes a macro
+  onto the stack and then executes it.
+<p class="Pp"></p>
+</div>
+<p class="Pp">Also included in Pesc are the following types:</p>
+<p class="Pp"></p>
+<div class="Bd-indent">&#x2022;<b>Strings</b> are, uh, strings. An example:
+  &quot;this is a string&quot;</div>
+<div class="Bd-indent">&#x2022;<b>Booleans</b>, either '(true)' or '(false)'
+<p class="Pp"></p>
+</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+<b>Example 1:</b> 1 2 +\*
+<p class="Pp"></p>
+<div class="Bd-indent">&#x2022;`1`: push 1 to the stack.
+ stack: 1</div>
+<div class="Bd-indent">&#x2022;`1`: push 2 to the stack.
+ stack: 2 1</div>
+<div class="Bd-indent">&#x2022;`+`: add the first two values on the stack and
+  push the result.
+ stack: 3</div>
+<div class="Bd-indent">&#x2022;`\`: duplicate the first value on the stack.
+ stack: 3 3</div>
+<div class="Bd-indent">&#x2022;`*`: multiply the first two values on the stack
+  and push the result.
+ stack: 6
+<p class="Pp"></p>
+</div>
+<p class="Pp"><b>Example 2:</b> 3 2 ^ [sqrt]</p>
+<p class="Pp"></p>
+<div class="Bd-indent">&#x2022;`3`: push 3 to the stack.
+ stack: 3</div>
+<div class="Bd-indent">&#x2022;`2`: push 2 to the stack.
+ stack: 2 3</div>
+<div class="Bd-indent">&#x2022;`^`: raise the second value on the stack to the
+  power of the first
+ item, and push the result.
+ stack: 9</div>
+<div class="Bd-indent">&#x2022;`[sqrt]`: call the 'sqrt' function, which pushes
+  the square root of the first item to the stack.
+ stack: 3
+<p class="Pp"></p>
+</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="STANDARD_LIBRARY"><a class="permalink" href="#STANDARD_LIBRARY">STANDARD
+  LIBRARY</a></h1>
+<b>Arithmetic operators:</b>
+<p class="Pp"></p>
+<table class="tbl" border="1" style="border-style: solid;">
+  <tr>
+    <td style="text-align: center;"><b>OPERATOR</b></td>
+    <td><b>NAME</b></td>
+    <td><b>ARGUMENTS</b></td>
+    <td><b>RETURN VALUE</b></td>
+    <td><b>DESCRIPTION</b></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">+ </td>
+    <td>add</td>
+    <td>a:number, b:number</td>
+    <td>number</td>
+    <td><i>&lt;a&gt;</i> + <i>&lt;b&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">-</td>
+    <td>sub</td>
+    <td>a:number, b:number</td>
+    <td>number</td>
+    <td><i>&lt;a&gt;</i> - <i>&lt;b&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">* or &#x00D7;</td>
+    <td>mul</td>
+    <td>a:number, b:number</td>
+    <td>number</td>
+    <td><i>&lt;a&gt;</i> * <i>&lt;b&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">/ or &#x00F7;</td>
+    <td>div</td>
+    <td>a:number, b:number</td>
+    <td>number</td>
+    <td><i>&lt;a&gt;</i> / <i>&lt;b&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">^</td>
+    <td>pow</td>
+    <td>a:number, b:number</td>
+    <td>number</td>
+    <td>raise <i>&lt;a&gt;</i> to the power of <i>&lt;b&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">%</td>
+    <td>mod</td>
+    <td>a:number, b:number</td>
+    <td>number</td>
+    <td><i>&lt;a&gt;</i> mod <i>&lt;b&gt;</i></td>
+  </tr>
+</table>
+<p class="Pp"></p>
+<p class="Pp"><b>Stack operators:</b></p>
+<p class="Pp"></p>
+<table class="tbl" border="1" style="border-style: solid;">
+  <tr>
+    <td style="text-align: center;"><b>OPERATOR</b></td>
+    <td><b>NAME</b></td>
+    <td><b>ARGUMENTS</b></td>
+    <td><b>RETURN VALUE</b></td>
+    <td><b>DESCRIPTION</b></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">(backslash)</td>
+    <td>dup</td>
+    <td>x:any</td>
+    <td>any</td>
+    <td>duplicates the first item on the stack.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">$</td>
+    <td>pop</td>
+    <td>x:any</td>
+    <td>none</td>
+    <td>pops the first item off the stack.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">,</td>
+    <td>swp</td>
+    <td>a:any, b:any</td>
+    <td>none</td>
+    <td>swaps the first two items on the stack.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">&#x00F8;</td>
+    <td>get</td>
+    <td>n:number</td>
+    <td>any</td>
+    <td>copies the <i>&lt;n&gt;</i>th item on the stack to the top.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">@</td>
+    <td>rot</td>
+    <td>n:number</td>
+    <td>any</td>
+    <td>rotates the <i>&lt;n&gt;</i>th item on the stack with the first.</td>
+  </tr>
+</table>
+<p class="Pp"></p>
+<p class="Pp"><b>Bitwise operators:</b></p>
+<p class="Pp"></p>
+<table class="tbl" border="1" style="border-style: solid;">
+  <tr>
+    <td style="text-align: center;"><b>OPERATOR</b></td>
+    <td><b>NAME</b></td>
+    <td><b>ARGUMENTS</b></td>
+    <td><b>RETURN VALUE</b></td>
+    <td><b>DESCRIPTION</b></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">&amp;</td>
+    <td>band</td>
+    <td>a:number, b:number</td>
+    <td>number</td>
+    <td><i>&lt;a&gt;</i> AND <i>&lt;b&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">~</td>
+    <td>bnot</td>
+    <td>x:number</td>
+    <td>number</td>
+    <td>NOT <i>&lt;x&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">|</td>
+    <td>bor</td>
+    <td>a:number, b:number</td>
+    <td>number</td>
+    <td><i>&lt;a&gt;</i> OR <i>&lt;b&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">X</td>
+    <td>bxor</td>
+    <td>a:number, b:number</td>
+    <td>number</td>
+    <td><i>&lt;a&gt;</i> XOR <i>&lt;b&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">&lt;</td>
+    <td>shl</td>
+    <td>a:number, b:number</td>
+    <td>number</td>
+    <td><i>&lt;a&gt;</i> &lt;&lt; <i>&lt;b&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">&gt;</td>
+    <td>shr</td>
+    <td>a:number, b:number</td>
+    <td>number</td>
+    <td><i>&lt;a&gt;</i> &gt;&gt; <i>&lt;b&gt;</i></td>
+  </tr>
+</table>
+<p class="Pp"></p>
+<p class="Pp"><b>Misc operators:</b></p>
+<p class="Pp"></p>
+<table class="tbl" border="1" style="border-style: solid;">
+  <tr>
+    <td style="text-align: center;"><b>OPERATOR</b></td>
+    <td><b>NAME</b></td>
+    <td><b>ARGUMENTS</b></td>
+    <td><b>RETURN VALUE</b></td>
+    <td><b>DESCRIPTION</b></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">;</td>
+    <td>run</td>
+    <td>m:macro</td>
+    <td>???</td>
+    <td>execute <i>&lt;m&gt;</i>.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>def</td>
+    <td>name:string, body:macro</td>
+    <td>none</td>
+    <td>define a new function with the name <i>&lt;name&gt;</i>, and a body of
+      <i>&lt;body&gt;</i>.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">s</td>
+    <td>size</td>
+    <td>none</td>
+    <td>number</td>
+    <td>push the size of the stack.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">r</td>
+    <td>rand</td>
+    <td>none</td>
+    <td>number</td>
+    <td>push a random number (see drand48(3))</td>
+  </tr>
+</table>
+<p class="Pp"></p>
+<p class="Pp"><b>Boolean functions:</b></p>
+<p class="Pp"></p>
+<table class="tbl" border="1" style="border-style: solid;">
+  <tr>
+    <td style="text-align: center;"><b>OPERATOR</b></td>
+    <td><b>FUNCTION NAME</b></td>
+    <td><b>ARGUMENTS</b></td>
+    <td><b>RETURN VALUE</b></td>
+    <td><b>DESCRIPTION</b></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">!</td>
+    <td>neg</td>
+    <td>x:bool</td>
+    <td>bool</td>
+    <td>negate <i>&lt;x&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>and</td>
+    <td>a:bool, b:bool</td>
+    <td>bool</td>
+    <td>if <i>&lt;a&gt;</i> is true, push '(true)'; otherwise, push
+      '(false)'</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>or</td>
+    <td>a:bool, b:bool</td>
+    <td>bool</td>
+    <td>if <i>&lt;a&gt;</i> is true, push '(true)'; if <i>&lt;a&gt;</i> is
+      false, push <i>&lt;b&gt;</i>.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>eq?</td>
+    <td>a:any, b:any</td>
+    <td>bool</td>
+    <td>push '(true)' if <i>&lt;a&gt;</i> === <i>&lt;b&gt;</i>; otherwise, push
+      '(false)'</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>gt?</td>
+    <td>a:any, b:any</td>
+    <td>bool</td>
+    <td>push '(true)' if <i>&lt;a&gt;</i> &gt; <i>&lt;b&gt;</i>; otherwise, push
+      '(false)'</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>lt?</td>
+    <td>a:any, b:any</td>
+    <td>bool</td>
+    <td>push '(true)' if <i>&lt;a&gt;</i> &lt; <i>&lt;b&gt;</i>; otherwise, push
+      '(false)'</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>gte</td>
+    <td>a:any, b:any</td>
+    <td>bool</td>
+    <td>push '(true)' if <i>&lt;a&gt;</i> &gt;= <i>&lt;b&gt;</i>; otherwise,
+      push '(false)'</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>lte</td>
+    <td>a:any, b:any</td>
+    <td>bool</td>
+    <td>push '(true)' if <i>&lt;a&gt;</i> &lt;= <i>&lt;b&gt;</i>; otherwise,
+      push '(false)'</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>if?</td>
+    <td>cond:bool, main:macro, else:macro</td>
+    <td>???</td>
+    <td>if <i>&lt;cond&gt;</i> is '(true)', execute <i>&lt;main&gt;</i>;
+      otherwise, execute <i>&lt;else&gt;</i>.</td>
+  </tr>
+</table>
+<p class="Pp"></p>
+<p class="Pp"><b>Trigonometric functions:</b></p>
+<p class="Pp"></p>
+<table class="tbl" border="1" style="border-style: solid;">
+  <tr>
+    <td style="text-align: center;"><b>OPERATOR</b></td>
+    <td><b>FUNCTION NAME</b></td>
+    <td><b>ARGUMENTS</b></td>
+    <td><b>RETURN VALUE</b></td>
+    <td><b>DESCRIPTION</b></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>sin</td>
+    <td>radians:number</td>
+    <td>number</td>
+    <td>sin(<i>&lt;radians&gt;</i>)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>cos</td>
+    <td>radians:number</td>
+    <td>number</td>
+    <td>cos(<i>&lt;radians&gt;</i>)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>tan</td>
+    <td>radians:number</td>
+    <td>number</td>
+    <td>tan(<i>&lt;radians&gt;</i>)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>csc</td>
+    <td>radians:number</td>
+    <td>number</td>
+    <td>1 / sin(<i>&lt;radians&gt;</i>)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>sec</td>
+    <td>radians:number</td>
+    <td>number</td>
+    <td>1 / cos(<i>&lt;radians&gt;</i>)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>cot</td>
+    <td>radians:number</td>
+    <td>number</td>
+    <td>1 / tan(<i>&lt;radians&gt;</i>)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>atan</td>
+    <td>radians:number</td>
+    <td>number</td>
+    <td>atan(<i>&lt;radians&gt;</i>)</td>
+  </tr>
+</table>
+<p class="Pp"></p>
+<p class="Pp"><b>Other math functions:</b></p>
+<p class="Pp"></p>
+<table class="tbl" border="1" style="border-style: solid;">
+  <tr>
+    <td style="text-align: center;"><b>OPERATOR</b></td>
+    <td><b>FUNCTION NAME</b></td>
+    <td><b>ARGUMENTS</b></td>
+    <td><b>RETURN VALUE</b></td>
+    <td><b>DESCRIPTION</b></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">l</td>
+    <td>log</td>
+    <td>x:number, base:number</td>
+    <td>number</td>
+    <td>push the logarithm of <i>&lt;x&gt;</i> with respect to
+      <i>&lt;base&gt;</i>.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>sqrt</td>
+    <td>x:number</td>
+    <td>number</td>
+    <td>square root of <i>&lt;x&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>cbrt</td>
+    <td>x:number</td>
+    <td>number</td>
+    <td>cube root of <i>&lt;x&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>fact</td>
+    <td>x:number</td>
+    <td>number</td>
+    <td>factorial of <i>&lt;x&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">A</td>
+    <td>ack</td>
+    <td>m:number, n:number</td>
+    <td>number</td>
+    <td>ackermann's function on <i>&lt;m&gt;</i> and <i>&lt;n&gt;</i> (see
+      <b>ALGORITHMS</b> below)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">a</td>
+    <td>abs</td>
+    <td>x:number</td>
+    <td>number</td>
+    <td>get absolute value of <i>&lt;x&gt;</i></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>lcm</td>
+    <td>a:number, b:number</td>
+    <td>number</td>
+    <td>get lowest common multiple of <i>&lt;a&gt;</i> and <i>&lt;b&gt;</i>.
+      (see <b>ALGORITHMS</b> below)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"> </td>
+    <td>gcd</td>
+    <td>u:number, v:number</td>
+    <td>number</td>
+    <td>get greatest common denominator of <i>&lt;a&gt;</i> and
+      <i>&lt;b&gt;</i>. (see <b>ALGORITHMS</b> below)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">p</td>
+    <td>pi</td>
+    <td>none</td>
+    <td>number</td>
+    <td>calculate and push pi (3.1415926532...) to the stack. (see
+      <b>ALGORITHMS</b> below)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">e</td>
+    <td>e</td>
+    <td>none</td>
+    <td>number</td>
+    <td>calculate and push Euler's number to the stack. (see <b>ALGORITHMS</b>
+      below)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">m</td>
+    <td>min</td>
+    <td>a:number, b:number</td>
+    <td>number</td>
+    <td>if <i>&lt;a&gt;</i> &gt; <i>&lt;b&gt;</i>, push <i>&lt;b&gt;</i>; else,
+      push <i>&lt;a&gt;</i>.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">M</td>
+    <td>max</td>
+    <td>a:number, b:number</td>
+    <td>number</td>
+    <td>if <i>&lt;a&gt;</i> &lt; <i>&lt;b&gt;</i>, push <i>&lt;b&gt;</i>; else,
+      push <i>&lt;a&gt;</i>.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">c</td>
+    <td>clamp</td>
+    <td>max:number, min:number, x:number</td>
+    <td>number</td>
+    <td>if <i>&lt;a&gt;</i> &lt; <i>&lt;min&gt;</i>, push <i>&lt;min&gt;</i>; if
+      <i>&lt;a&gt;</i> &gt; <i>&lt;max&gt;</i>, push <i>&lt;max&gt;</i>; else,
+      push <i>&lt;a&gt;</i>.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"></td>
+    <td>floor</td>
+    <td>x:number</td>
+    <td>number</td>
+    <td>round <i>&lt;x&gt;</i> down.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"></td>
+    <td>ceil</td>
+    <td>x:number</td>
+    <td>number</td>
+    <td>round <i>&lt;x&gt;</i> up.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"></td>
+    <td>round</td>
+    <td>x:number</td>
+    <td>number</td>
+    <td>round <i>&lt;x&gt;</i> to the nearest integer.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"></td>
+    <td>frrn</td>
+    <td>x:string</td>
+    <td>number</td>
+    <td>convert the roman numeral string <i>&lt;x&gt;</i> to a number.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"></td>
+    <td>torn</td>
+    <td>x:number</td>
+    <td>string</td>
+    <td>convert <i>&lt;x&gt;</i> to roman numerals.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"></td>
+    <td>odd</td>
+    <td>x:number</td>
+    <td>bool</td>
+    <td>return '(true)' if <i>&lt;x&gt;</i> is odd.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"></td>
+    <td>even</td>
+    <td>x:number</td>
+    <td>bool</td>
+    <td>return '(true)' if <i>&lt;x&gt;</i> is even.</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"></td>
+    <td>coprime</td>
+    <td>u:number, v:number</td>
+    <td>number</td>
+    <td>return '(true)' if gcd(<i>&lt;u&gt;</i>, <i>&lt;v&gt;</i>) == 1 (that
+      is, if <i>&lt;u&gt;</i> is coprime to <i>&lt;v&gt;</i>). (see
+      <b>ALGORITHMS</b> below)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"></td>
+    <td>prime</td>
+    <td>x:number</td>
+    <td>bool</td>
+    <td>return '(true)' if <i>&lt;x&gt;</i> is a prime number. (see
+      <b>ALGORITHMS</b> below)</td>
+  </tr>
+</table>
+<p class="Pp"></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ALGORITHMS"><a class="permalink" href="#ALGORITHMS">ALGORITHMS</a></h1>
+<b>Pi</b> is derived using the Machin formula:
+<div class="Bd-indent">
+<pre>
+pi = (4 * atan(1/5) - atan(1/239)) * 4
+</pre>
+</div>
+<p class="Pp"><b>Euler's number</b> is calculated by:</p>
+<div class="Bd-indent">
+<pre>
+        inf
+        ___  1
+e = 1 + \   &#x2500;&#x2500;&#x2500;
+        /__ +n!
+        n=0
+</pre>
+</div>
+<p class="Pp"><b>Ackermann's function</b> is usually defined as:</p>
+<div class="Bd-indent">
+<pre>
+          &#x239B;
+          &#x23A2;  n + 1                  if m = 0
+A(m, n) = &#x23A8;  A(m - 1, 1)            if m &gt; 0 and n = 0
+          &#x23A2;  A(m - 1, A(m, n - 1))  if m &gt; 0 and n &gt; 0
+          &#x239D;
+</pre>
+</div>
+<p class="Pp">The <b>greatest common factor</b> is calculated using Josef
+    Stein's binary GCD algorithm, instead of Euclid's GCD algorithm:</p>
+<p class="Pp"></p>
+<div class="Bd-indent">
+<pre>
+            &#x239B;  v                          if u == 0
+            &#x23A2;  u                          if v == 0
+            &#x23A2;  gcd(u/2, v/2)              if u and v are even
+gcd(u, v) = &#x23A8;  gcd(u/2, v)                if u is even
+            &#x23A2;  gcd(u, v/2)                if v is even
+            &#x23A2;  gcd(&#x23A2;u - v&#x2309;, min(u, v))
+            &#x239D;  u                          if u == v
+</pre>
+</div>
+<p class="Pp">The <b>lowest common multiple</b> is derived from the formula:</p>
+<p class="Pp"></p>
+<div class="Bd-indent">
+<pre>
+             &#x239B;           &#x239E;
+             &#x239C;    &#x239C;a&#x2309;    &#x239F;
+lcm(a, b) =  &#x239C; &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500; &#x239F; &#x00D7; &#x239C;b&#x2309;
+             &#x239C; gcd(a, b) &#x239F;
+             &#x239D;           &#x23A0;
+</pre>
+</div>
+<p class="Pp">Whether a number is <b>prime</b> or not is determined using the
+    formula described in this Stack Overflow answer
+    (<i>https://stackoverflow.com/a/26760082</i>). That is, for a prime
+    <i>p</i>, instead of checking every integer &#x2264; &#x221A;<i>p</i> for
+    divisibility by <i>p</i>, we only need to check if <i>p</i> is divisible by
+    2 or 3, and then check all integers of the form 6k &#x00B1; 1 &#x2264;
+    &#x221A;<i>p</i>.</p>
+<p class="Pp">To quote @Blackhat002 from the SO answer:</p>
+<p class="Pp"></p>
+<div class="Bd-indent">
+<div class="Bd-indent">&#x2022;The algorithm can be improved further by
+  observing that all primes are of the form 6k &#x00B1; 1, with the exception of
+  2 and 3.</div>
+<div class="Bd-indent">&#x2022;This is because all integers can be expressed as
+  (6k + i) for some integer k and for i = &#x2212;1, 0, 1, 2, 3, or 4; 2 divides
+  (6k + 0), (6k + 2), (6k + 4); and 3 divides (6k + 3).</div>
+<div class="Bd-indent">&#x2022;So a more efficient method is to test if n is
+  divisible by 2 or 3, then to check through all the numbers of form 6k &#x00B1;
+  1 &#x2264; &#x221A;n.</div>
+<div class="Bd-indent">&#x2022;This is 3 times as fast as testing all m up to
+  &#x221A;n.
+<p class="Pp"></p>
+</div>
+</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="LUA_API"><a class="permalink" href="#LUA_API">LUA
+  API</a></h1>
+As of October 2020, the Lua API has not yet been implemented, and is thus not
+  documented. It is planned for the next release, however.
+</section>
+<section class="Sh">
+<h1 class="Sh" id="BUGS"><a class="permalink" href="#BUGS">BUGS</a></h1>
+None known.
+<p class="Pp">If you do happen to encounter one, please report it here:
+    <i>https://github.com/lptstr/pesc/issues/new</i></p>
+<p class="Pp">Missing or poor documentation is considered a bug; if you think
+    you can improve this manpage (or any other Pesc docs), any contributions to
+    that end would be greatly appreciated.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="AUTHOR"><a class="permalink" href="#AUTHOR">AUTHOR</a></h1>
+<div class="Bd-indent">&#x2022;Ki&#x00EB;d Llaentenn &lt;kiedtl [at] protonmail
+  [dot] com&gt;
+<p class="Pp"></p>
+</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="ACKNOWLEDGMENTS"><a class="permalink" href="#ACKNOWLEDGMENTS">ACKNOWLEDGMENTS</a></h1>
+The author would like to thank the authors of the following programs for
+  inspiring the creation of this ridiculous language:
+<p class="Pp"></p>
+<div class="Bd-indent">&#x2022;GNU dc</div>
+<div class="Bd-indent">&#x2022;FALSE</div>
+<div class="Bd-indent">&#x2022;FORTH</div>
+<div class="Bd-indent">&#x2022;Joy</div>
+<div class="Bd-indent">&#x2022;GNU bc</div>
+<div class="Bd-indent">&#x2022;eva (<i>https://github.com/NerdyPepper/eva</i>)
+<p class="Pp"></p>
+</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<b>pescli</b>(1) <b>dc</b>(1) <b>bc</b>(1)
+<p class="Pp">The full documentation for <b>pesc</b> is not maintained as a
+    Texinfo manual. If the <b>info</b> and <b>pesc</b> programs are properly
+    installed on your system, the command</p>
+<p class="Pp"></p>
+<div class="Bd-indent"><b>info pesc</b></div>
+<p class="Pp">should not give you access to the complete manual.</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">2020-10-12</td>
+    <td class="foot-os"></td>
+  </tr>
+</table>
+</body>
+</html>

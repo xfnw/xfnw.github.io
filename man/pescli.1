@@ -1,0 +1,57 @@
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.nh
+.ad l
+.TH "pescli" "1" "2020-10-12"
+.P
+.SH NAME
+.P
+\fBpescli\fR [\fIOPTION\fR]... [\fIFILE\fR]
+.P
+.SH DESCRIPTION
+.P
+Execute Pesc instructions from FILE and display the result. If no
+file is given, read from stdin.
+.P
+pescli uses the Pesc calculation language; see pesc(7) for more
+information.
+.P
+.SH OPTIONS
+.P
+\fB-h,  --help\fR
+.RS 4
+Print a short help message and exit.
+.P
+.RE
+\fB-V, --version\fR
+.RS 4
+Print pescli's version and exit.
+.P
+.RE
+\fB-q, --quiet\fR
+.RS 4
+Print as little information as possible.
+.P
+.RE
+.SH REPORTING BUGS
+.P
+Report bugs to \fIhttps://github.com/lptstr/pesc/issues/new\fR.
+.P
+.SH COPYRIGHT
+.P
+Copyright (c) 2020 Kiëd Llaentenn.
+pescli is licensed under the GNU GPLv3 license.
+.P
+.SH SEE ALSO
+.P
+\fBpesc(7)\fR
+.P
+The full documentation for \fBpescli\fR is not maintained as a Texinfo manual.
+If the \fBinfo\fR and \fBpescli\fR programs are properly installed on your system,
+the command
+.P
+.RS 4
+\fBinfo pescli\fR
+.P
+.RE
+should not give you access to the complete manual.

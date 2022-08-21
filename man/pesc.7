@@ -1,0 +1,1246 @@
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.nh
+.ad l
+.TH "pesc" "7" "2020-10-12"
+.P
+.SH NAME
+.P
+pesc - a lame esoteric language thinly disguised as a calculator
+.P
+.SH DESCRIPTION
+.P
+Pesc is a calculation language for evaluating reverse-Polish notation
+mathematical expressions. Pesc has many similarities to dc's language.
+.P
+.SH SYNTAX
+.P
+Pesc is comprised of a series of \fBtokens\fR, the basic building block of
+the language. Each token will either push itself onto the \fBstack\fR, or
+(in the case of functions and operators) manipulate the contents of the
+stack and (maybe) push a result.
+.P
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+A \fBnumber\fR are what you'd expect: a single 64-bit floating point number.
+Numbers can have underscores: 1_000_000 is equivalent to 1000000,
+and 3.14_15_92 is equal to 3.141592.
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+\fBOperators\fR are single-character functions that pop values off of the
+stack, do something with it, and push a result. Typical operators
+include the arithmetic operators (+, -, /, *) and the bitwise operators
+(&, |, ~, X, <, >). Example: '1 1 +' evaluates 1 + 1.
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+\fBFunctions\fR are similar to operators, but can be multiple characters
+in length, and are called by surrounding the function name in brackets.
+All operators have corresponding function names (e.g. '+' => 'add').
+Example: '1 1 [add]' does exactly what '1 1 +' would do.
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+A \fBmacro\fR, or a code block, is a chunk of Pesc code delimited by braces
+that will be pushed onto the stack to be executed later (using the ';'
+operator). Example: '{1 1 +};' pushes a macro onto the stack and then
+executes it.
+
+.RE
+.P
+Also included in Pesc are the following types:
+.P
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+\fBStrings\fR are, uh, strings. An example: "this is a string"
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+\fBBooleans\fR, either '(true)' or '(false)'
+
+.RE
+.P
+.SH EXAMPLES
+.P
+\fBExample 1:\fR    1 2 +\\*
+.P
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+`1`: push 1 to the stack.
+ stack: 1
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+`1`: push 2 to the stack.
+ stack: 2 1
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+`+`: add the first two values on the stack and push the result.
+ stack: 3
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+`\\`: duplicate the first value on the stack.
+ stack: 3 3
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+`*`: multiply the first two values on the stack and push the result.
+ stack: 6
+
+.RE
+.P
+\fBExample 2:\fR    3 2 ^ [sqrt]
+.P
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+`3`: push 3 to the stack.
+ stack: 3
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+`2`: push 2 to the stack.
+ stack: 2 3
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+`^`: raise the second value on the stack to the power of the first
+ item, and push the result.
+ stack: 9
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+`[sqrt]`: call the 'sqrt' function, which pushes the square root
+of the first item to the stack.
+ stack: 3
+
+.RE
+.P
+.P
+.SH STANDARD LIBRARY
+.P
+\fBArithmetic operators:\fR
+.P
+.TS
+allbox;c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx.
+T{
+\fBOPERATOR\fR
+T}	T{
+\fBNAME\fR
+T}	T{
+\fBARGUMENTS\fR
+T}	T{
+\fBRETURN VALUE\fR
+T}	T{
+\fBDESCRIPTION\fR
+T}
+T{
++
+
+T}	T{
+add
+T}	T{
+a:number, b:number
+T}	T{
+number
+T}	T{
+\fI<a>\fR + \fI<b>\fR
+T}
+T{
+-
+T}	T{
+sub
+T}	T{
+a:number, b:number
+T}	T{
+number
+T}	T{
+\fI<a>\fR - \fI<b>\fR
+T}
+T{
+* or ×
+T}	T{
+mul
+T}	T{
+a:number, b:number
+T}	T{
+number
+T}	T{
+\fI<a>\fR * \fI<b>\fR
+T}
+T{
+/ or ÷
+T}	T{
+div
+T}	T{
+a:number, b:number
+T}	T{
+number
+T}	T{
+\fI<a>\fR / \fI<b>\fR
+T}
+T{
+^
+T}	T{
+pow
+T}	T{
+a:number, b:number
+T}	T{
+number
+T}	T{
+raise \fI<a>\fR to the power of \fI<b>\fR
+T}
+T{
+%
+T}	T{
+mod
+T}	T{
+a:number, b:number
+T}	T{
+number
+T}	T{
+\fI<a>\fR mod \fI<b>\fR
+T}
+.TE
+.sp 1
+.P
+\fBStack operators:\fR
+.P
+.TS
+allbox;c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx.
+T{
+\fBOPERATOR\fR
+T}	T{
+\fBNAME\fR
+T}	T{
+\fBARGUMENTS\fR
+T}	T{
+\fBRETURN VALUE\fR
+T}	T{
+\fBDESCRIPTION\fR
+T}
+T{
+(backslash)
+T}	T{
+dup
+T}	T{
+x:any
+T}	T{
+any
+T}	T{
+duplicates the first item on the stack.
+T}
+T{
+$
+T}	T{
+pop
+T}	T{
+x:any
+T}	T{
+none
+T}	T{
+pops the first item off the stack.
+T}
+T{
+,
+T}	T{
+swp
+T}	T{
+a:any, b:any
+T}	T{
+none
+T}	T{
+swaps the first two items on the stack.
+T}
+T{
+ø
+T}	T{
+get
+T}	T{
+n:number
+T}	T{
+any
+T}	T{
+copies the \fI<n>\fRth item on the stack to the top.
+T}
+T{
+@
+T}	T{
+rot
+T}	T{
+n:number
+T}	T{
+any
+T}	T{
+rotates the \fI<n>\fRth item on the stack with the first.
+T}
+.TE
+.sp 1
+.P
+\fBBitwise operators:\fR
+.P
+.TS
+allbox;c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx.
+T{
+\fBOPERATOR\fR
+T}	T{
+\fBNAME\fR
+T}	T{
+\fBARGUMENTS\fR
+T}	T{
+\fBRETURN VALUE\fR
+T}	T{
+\fBDESCRIPTION\fR
+T}
+T{
+&
+T}	T{
+band
+T}	T{
+a:number, b:number
+T}	T{
+number
+T}	T{
+\fI<a>\fR AND \fI<b>\fR
+T}
+T{
+~
+T}	T{
+bnot
+T}	T{
+x:number
+T}	T{
+number
+T}	T{
+NOT \fI<x>\fR
+T}
+T{
+|
+T}	T{
+bor
+T}	T{
+a:number, b:number
+T}	T{
+number
+T}	T{
+\fI<a>\fR OR \fI<b>\fR
+T}
+T{
+X
+T}	T{
+bxor
+T}	T{
+a:number, b:number
+T}	T{
+number
+T}	T{
+\fI<a>\fR XOR \fI<b>\fR
+T}
+T{
+<
+T}	T{
+shl
+T}	T{
+a:number, b:number
+T}	T{
+number
+T}	T{
+\fI<a>\fR << \fI<b>\fR
+T}
+T{
+>
+T}	T{
+shr
+T}	T{
+a:number, b:number
+T}	T{
+number
+T}	T{
+\fI<a>\fR >> \fI<b>\fR
+T}
+.TE
+.sp 1
+.P
+\fBMisc operators:\fR
+.P
+.TS
+allbox;c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx.
+T{
+\fBOPERATOR\fR
+T}	T{
+\fBNAME\fR
+T}	T{
+\fBARGUMENTS\fR
+T}	T{
+\fBRETURN VALUE\fR
+T}	T{
+\fBDESCRIPTION\fR
+T}
+T{
+;
+T}	T{
+run
+T}	T{
+m:macro
+T}	T{
+???
+T}	T{
+execute \fI<m>\fR.
+T}
+T{
+ 
+T}	T{
+def
+T}	T{
+name:string, body:macro
+T}	T{
+none
+T}	T{
+define a new function with the name \fI<name>\fR, and a body of \fI<body>\fR.
+T}
+T{
+s
+T}	T{
+size
+T}	T{
+none
+T}	T{
+number
+T}	T{
+push the size of the stack.
+T}
+T{
+r
+T}	T{
+rand
+T}	T{
+none
+T}	T{
+number
+T}	T{
+push a random number (see drand48(3))
+T}
+.TE
+.sp 1
+.P
+.P
+\fBBoolean functions:\fR
+.P
+.TS
+allbox;c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx.
+T{
+\fBOPERATOR\fR
+T}	T{
+\fBFUNCTION NAME\fR
+T}	T{
+\fBARGUMENTS\fR
+T}	T{
+\fBRETURN VALUE\fR
+T}	T{
+\fBDESCRIPTION\fR
+T}
+T{
+!
+T}	T{
+neg
+T}	T{
+x:bool
+T}	T{
+bool
+T}	T{
+negate \fI<x>\fR
+T}
+T{
+ 
+T}	T{
+and
+T}	T{
+a:bool, b:bool
+T}	T{
+bool
+T}	T{
+if \fI<a>\fR is true, push '(true)'; otherwise, push '(false)'
+T}
+T{
+ 
+T}	T{
+or
+T}	T{
+a:bool, b:bool
+T}	T{
+bool
+T}	T{
+if \fI<a>\fR is true, push '(true)'; if \fI<a>\fR is false, push \fI<b>\fR.
+T}
+T{
+ 
+T}	T{
+eq?
+T}	T{
+a:any, b:any
+T}	T{
+bool
+T}	T{
+push '(true)' if \fI<a>\fR === \fI<b>\fR; otherwise, push '(false)'
+T}
+T{
+ 
+T}	T{
+gt?
+T}	T{
+a:any, b:any
+T}	T{
+bool
+T}	T{
+push '(true)' if \fI<a>\fR > \fI<b>\fR; otherwise, push '(false)'
+T}
+T{
+ 
+T}	T{
+lt?
+T}	T{
+a:any, b:any
+T}	T{
+bool
+T}	T{
+push '(true)' if \fI<a>\fR < \fI<b>\fR; otherwise, push '(false)'
+T}
+T{
+ 
+T}	T{
+gte
+T}	T{
+a:any, b:any
+T}	T{
+bool
+T}	T{
+push '(true)' if \fI<a>\fR >= \fI<b>\fR; otherwise, push '(false)'
+T}
+T{
+ 
+T}	T{
+lte
+T}	T{
+a:any, b:any
+T}	T{
+bool
+T}	T{
+push '(true)' if \fI<a>\fR <= \fI<b>\fR; otherwise, push '(false)'
+T}
+T{
+ 
+T}	T{
+if?
+T}	T{
+cond:bool, main:macro, else:macro
+T}	T{
+???
+T}	T{
+if \fI<cond>\fR is '(true)', execute \fI<main>\fR; otherwise, execute \fI<else>\fR.
+T}
+.TE
+.sp 1
+.P
+.P
+\fBTrigonometric functions:\fR
+.P
+.TS
+allbox;c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx.
+T{
+\fBOPERATOR\fR
+T}	T{
+\fBFUNCTION NAME\fR
+T}	T{
+\fBARGUMENTS\fR
+T}	T{
+\fBRETURN VALUE\fR
+T}	T{
+\fBDESCRIPTION\fR
+T}
+T{
+ 
+T}	T{
+sin
+T}	T{
+radians:number
+T}	T{
+number
+T}	T{
+sin(\fI<radians>\fR)
+T}
+T{
+ 
+T}	T{
+cos
+T}	T{
+radians:number
+T}	T{
+number
+T}	T{
+cos(\fI<radians>\fR)
+T}
+T{
+ 
+T}	T{
+tan
+T}	T{
+radians:number
+T}	T{
+number
+T}	T{
+tan(\fI<radians>\fR)
+T}
+T{
+ 
+T}	T{
+csc
+T}	T{
+radians:number
+T}	T{
+number
+T}	T{
+1 / sin(\fI<radians>\fR)
+T}
+T{
+ 
+T}	T{
+sec
+T}	T{
+radians:number
+T}	T{
+number
+T}	T{
+1 / cos(\fI<radians>\fR)
+T}
+T{
+ 
+T}	T{
+cot
+T}	T{
+radians:number
+T}	T{
+number
+T}	T{
+1 / tan(\fI<radians>\fR)
+T}
+T{
+ 
+T}	T{
+atan
+T}	T{
+radians:number
+T}	T{
+number
+T}	T{
+atan(\fI<radians>\fR)
+T}
+.TE
+.sp 1
+.P
+.P
+\fBOther math functions:\fR
+.P
+.TS
+allbox;c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx
+c l l l lx.
+T{
+\fBOPERATOR\fR
+T}	T{
+\fBFUNCTION NAME\fR
+T}	T{
+\fBARGUMENTS\fR
+T}	T{
+\fBRETURN VALUE\fR
+T}	T{
+\fBDESCRIPTION\fR
+T}
+T{
+l
+T}	T{
+log
+T}	T{
+x:number, base:number
+T}	T{
+number
+T}	T{
+push the logarithm of \fI<x>\fR with respect to \fI<base>\fR.
+T}
+T{
+ 
+T}	T{
+sqrt
+T}	T{
+x:number
+T}	T{
+number
+T}	T{
+square root of \fI<x>\fR
+T}
+T{
+ 
+T}	T{
+cbrt
+T}	T{
+x:number
+T}	T{
+number
+T}	T{
+cube root of \fI<x>\fR
+T}
+T{
+ 
+T}	T{
+fact
+T}	T{
+x:number
+T}	T{
+number
+T}	T{
+factorial of \fI<x>\fR
+T}
+T{
+A
+T}	T{
+ack
+T}	T{
+m:number, n:number
+T}	T{
+number
+T}	T{
+ackermann's function on \fI<m>\fR and \fI<n>\fR (see \fBALGORITHMS\fR below)
+T}
+T{
+a
+T}	T{
+abs
+T}	T{
+x:number
+T}	T{
+number
+T}	T{
+get absolute value of \fI<x>\fR
+T}
+T{
+ 
+T}	T{
+lcm
+T}	T{
+a:number, b:number
+T}	T{
+number
+T}	T{
+get lowest common multiple of \fI<a>\fR and \fI<b>\fR. (see \fBALGORITHMS\fR below)
+T}
+T{
+ 
+T}	T{
+gcd
+T}	T{
+u:number, v:number
+T}	T{
+number
+T}	T{
+get greatest common denominator of \fI<a>\fR and \fI<b>\fR. (see \fBALGORITHMS\fR below)
+T}
+T{
+p
+T}	T{
+pi
+T}	T{
+none
+T}	T{
+number
+T}	T{
+calculate and push pi (3.1415926532...) to the stack. (see \fBALGORITHMS\fR below)
+T}
+T{
+e
+T}	T{
+e
+T}	T{
+none
+T}	T{
+number
+T}	T{
+calculate and push Euler's number to the stack. (see \fBALGORITHMS\fR below)
+T}
+T{
+m
+T}	T{
+min
+T}	T{
+a:number, b:number
+T}	T{
+number
+T}	T{
+if \fI<a>\fR > \fI<b>\fR, push \fI<b>\fR; else, push \fI<a>\fR.
+T}
+T{
+M
+T}	T{
+max
+T}	T{
+a:number, b:number
+T}	T{
+number
+T}	T{
+if \fI<a>\fR < \fI<b>\fR, push \fI<b>\fR; else, push \fI<a>\fR.
+T}
+T{
+c
+T}	T{
+clamp
+T}	T{
+max:number, min:number, x:number
+T}	T{
+number
+T}	T{
+if \fI<a>\fR < \fI<min>\fR, push \fI<min>\fR; if \fI<a>\fR > \fI<max>\fR, push \fI<max>\fR; else, push \fI<a>\fR.
+T}
+T{
+
+T}	T{
+floor
+T}	T{
+x:number
+T}	T{
+number
+T}	T{
+round \fI<x>\fR down.
+T}
+T{
+
+T}	T{
+ceil
+T}	T{
+x:number
+T}	T{
+number
+T}	T{
+round \fI<x>\fR up.
+T}
+T{
+
+T}	T{
+round
+T}	T{
+x:number
+T}	T{
+number
+T}	T{
+round \fI<x>\fR to the nearest integer.
+T}
+T{
+
+T}	T{
+frrn
+T}	T{
+x:string
+T}	T{
+number
+T}	T{
+convert the roman numeral string \fI<x>\fR to a number.
+T}
+T{
+
+T}	T{
+torn
+T}	T{
+x:number
+T}	T{
+string
+T}	T{
+convert \fI<x>\fR to roman numerals.
+T}
+T{
+
+T}	T{
+odd
+T}	T{
+x:number
+T}	T{
+bool
+T}	T{
+return '(true)' if \fI<x>\fR is odd.
+T}
+T{
+
+T}	T{
+even
+T}	T{
+x:number
+T}	T{
+bool
+T}	T{
+return '(true)' if \fI<x>\fR is even.
+T}
+T{
+
+T}	T{
+coprime
+T}	T{
+u:number, v:number
+T}	T{
+number
+T}	T{
+return '(true)' if gcd(\fI<u>\fR, \fI<v>\fR) == 1 (that is, if \fI<u>\fR is coprime to \fI<v>\fR). (see \fBALGORITHMS\fR below)
+T}
+T{
+
+T}	T{
+prime
+T}	T{
+x:number
+T}	T{
+bool
+T}	T{
+return '(true)' if \fI<x>\fR is a prime number. (see \fBALGORITHMS\fR below)
+T}
+.TE
+.sp 1
+.P
+.SH ALGORITHMS
+.P
+\fBPi\fR is derived using the Machin formula:
+.nf
+.RS 4
+pi = (4 * atan(1/5) - atan(1/239)) * 4
+.fi
+.RE
+.P
+\fBEuler's number\fR is calculated by:
+.nf
+.RS 4
+        inf
+        ___  1
+e = 1 + \\   ───
+        /__ +n!
+        n=0
+.fi
+.RE
+.P
+\fBAckermann's function\fR is usually defined as:
+.nf
+.RS 4
+          ⎛
+          ⎢  n + 1                  if m = 0
+A(m, n) = ⎨  A(m - 1, 1)            if m > 0 and n = 0
+          ⎢  A(m - 1, A(m, n - 1))  if m > 0 and n > 0
+          ⎝
+.fi
+.RE
+.P
+The \fBgreatest common factor\fR is calculated using Josef Stein's
+binary GCD algorithm, instead of Euclid's GCD algorithm:
+.P
+.nf
+.RS 4
+            ⎛  v                          if u == 0
+            ⎢  u                          if v == 0
+            ⎢  gcd(u/2, v/2)              if u and v are even
+gcd(u, v) = ⎨  gcd(u/2, v)                if u is even
+            ⎢  gcd(u, v/2)                if v is even
+            ⎢  gcd(⎢u - v⌉, min(u, v))
+            ⎝  u                          if u == v
+.fi
+.RE
+.P
+The \fBlowest common multiple\fR is derived from the formula:
+.P
+.nf
+.RS 4
+             ⎛           ⎞
+             ⎜    ⎜a⌉    ⎟
+lcm(a, b) =  ⎜ ───────── ⎟ × ⎜b⌉
+             ⎜ gcd(a, b) ⎟
+             ⎝           ⎠
+.fi
+.RE
+.P
+Whether a number is \fBprime\fR or not is determined using the formula
+described in this Stack Overflow answer
+(\fIhttps://stackoverflow.com/a/26760082\fR). That is, for a prime \fIp\fR,
+instead of checking every integer ≤ √\fIp\fR for divisibility by \fIp\fR, we only
+need to check if \fIp\fR is divisible by 2 or 3, and then check all integers
+of the form 6k ± 1 ≤ √\fIp\fR.
+.P
+To quote @Blackhat002 from the SO answer:
+.P
+.RS 4
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+The algorithm can be improved further by observing that all primes are of the form 6k ± 1, with the exception of 2 and 3. 
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+This is because all integers can be expressed as (6k + i) for some integer k and for i = −1, 0, 1, 2, 3, or 4; 2 divides (6k + 0), (6k + 2), (6k + 4); and 3 divides (6k + 3). 
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+So a more efficient method is to test if n is divisible by 2 or 3, then to check through all the numbers of form 6k ± 1 ≤ √n.
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+This is 3 times as fast as testing all m up to √n.
+
+.RE
+.P
+.RE
+.SH LUA API
+.P
+As of October 2020, the Lua API has not yet been implemented, and is thus
+not documented. It is planned for the next release, however.
+.P
+.SH BUGS
+.P
+None known.
+.P
+If you do happen to encounter one, please report it here:
+\fIhttps://github.com/lptstr/pesc/issues/new\fR
+.P
+Missing or poor documentation is considered a bug; if you think
+you can improve this manpage (or any other Pesc docs), any contributions
+to that end would be greatly appreciated.
+.P
+.SH AUTHOR
+.P
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+Kiëd Llaentenn <kiedtl [at] protonmail [dot] com>
+
+.RE
+.P
+.SH ACKNOWLEDGMENTS
+.P
+The author would like to thank the authors of the following programs
+for inspiring the creation of this ridiculous language:
+.P
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+GNU dc
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+FALSE
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+FORTH
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+Joy
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+GNU bc
+.RE
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.IP \(bu 4
+.\}
+eva (\fIhttps://github.com/NerdyPepper/eva\fR)
+
+.RE
+.P
+.SH SEE ALSO
+.P
+\fBpescli\fR(1) \fBdc\fR(1) \fBbc\fR(1)
+.P
+The full documentation for \fBpesc\fR is not maintained as a Texinfo manual.
+If the \fBinfo\fR and \fBpesc\fR programs are properly installed on your system,
+the command
+.P
+.RS 4
+\fBinfo pesc\fR
+.P
+.RE
+should not give you access to the complete manual.
