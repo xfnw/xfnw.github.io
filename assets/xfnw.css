@@ -18,6 +18,10 @@ a {
   color: #3291ff;
 }
 
+a:visited {
+  color: #931fff;
+}
+
 a:hover {
   text-decoration: underline;
 }
@@ -89,3 +93,31 @@ details *:not(summary) {
   flex: 1 1 0;
 }
 
+@media (prefers-color-scheme: light) {
+  body {
+    background: white;
+    color: #141415;
+  }
+  a {
+    color: #0000EE;
+  }
+  a:visited {
+    color: #551A8B;
+  }
+  th,
+  td,
+  details {
+    border: 1px solid #ddd;
+  }
+  code,
+  kbd,
+  pre,
+  .flex div {
+    background: #ddd;
+    color: #111;
+  }
+  th,
+  summary {
+    background-color: #ddd;
+  }
+}
