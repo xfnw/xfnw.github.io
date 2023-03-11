@@ -1,15 +1,13 @@
 body {
   background: #141415;
-  font-family: sans-serif;
   color: #cdcdcd;
+  font-family: sans-serif;
   max-width: 700px;
   margin: 0 auto;
   padding: 10px;
 }
 
-h1,
-h2,
-h3 {
+h1, h2, h3, h4, h5, h6 {
   font-weight: 400;
 }
 
@@ -26,22 +24,18 @@ a:hover {
   text-decoration: underline;
 }
 
-code,
-kbd,
-pre,
-.flex div {
+code, kbd, pre, .flex div {
   background: #222;
   color: #eee;
 }
 
-pre,
-.flex div {
+pre, .flex div {
   padding: 5px;
   overflow: auto;
 }
 
 mark {
-  background-color: #dc5;
+  background: #dc5;
 }
 
 summary {
@@ -49,23 +43,20 @@ summary {
   padding: 10px;
 }
 
-th,
-summary {
-  background-color: #222;
+th, summary, input {
+  background: #222;
+  color: #cdcdcd;
 }
 
-th,
-td,
-details {
+th, td, details, input {
   border: 1px solid #222;
 }
-th,
-td {
+
+th, td {
   padding: 5px;
 }
 
-table,
-details *:not(summary) {
+table, details *:not(summary) {
   border-collapse: collapse;
   margin: 10px;
 }
@@ -104,20 +95,15 @@ details *:not(summary) {
   a:visited {
     color: #551A8B;
   }
-  th,
-  td,
-  details {
+  th, summary, input {
+    background: #ddd;
+    color: #141415;
+  }
+  th, td, details, input {
     border: 1px solid #ddd;
   }
-  code,
-  kbd,
-  pre,
-  .flex div {
+  code, kbd, pre, .flex div {
     background: #ddd;
     color: #111;
-  }
-  th,
-  summary {
-    background-color: #ddd;
   }
 }
