@@ -24,6 +24,10 @@ a:hover {
   text-decoration: underline;
 }
 
+:target {
+  background: #443;
+}
+
 code, kbd, pre {
   color: #eee;
 }
