@@ -64,6 +64,10 @@ th, td, details, input {
   border: 1px solid #333;
 }
 
+input[type=button], input[type=submit] {
+  cursor: pointer;
+}
+
 th, td {
   padding: 5px;
 }
@@ -96,6 +100,10 @@ table, details *:not(summary) {
   flex: 1 1 0;
 }
 
+.alert {
+  background: #bb1111;
+}
+
 @media (prefers-color-scheme: light) {
   body {
     background: white;
@@ -119,5 +127,8 @@ table, details *:not(summary) {
   }
   code, kbd, pre, .flex div, .box {
     background: #ddd;
+  }
+  .alert {
+    background: #f51818;
   }
 }
